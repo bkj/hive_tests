@@ -1,7 +1,7 @@
 ### hive_tests
 
 graph_search
-    - standard datasets w/ randomly chosen seeds + random scores
+- - standard datasets w/ randomly chosen seeds + random scores
     - TA1 datasets?
     
 vertex_nomination
@@ -41,8 +41,6 @@ LCG
     - implement other weighting functions
     - test Yuechao's OOM 
  * partial writeup
- 
- 
      - OOM once graph is large enough?
      - How can we handle this gracefully?
      - Should implement this w/ SpMM 
