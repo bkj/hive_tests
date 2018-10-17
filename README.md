@@ -40,13 +40,16 @@ LCG
     - implement as SpMM
     - implement other weighting functions
     - test Yuechao's OOM 
- * partial writeup
+
+* partial writeup
      - OOM once graph is large enough?
      - How can we handle this gracefully?
      - Should implement this w/ SpMM 
         - different weighting functions may complicate things, but the weighting functions in the reference code don't make a ton of sense
         - Running Scala w/ false is like multipliying G.T.dot(G_ones) where G_ones is G but w/ ones instead of values
         - Running Scala w/ true doesn't obviously map to matrix multiplication w/ normal semiring
+
+- This is currently broken on `dev-refactor`? Works on `sgpyc`'s `bkj-testing-hotfix` though
 
 ### graph_search
     - implement biased random sampling
