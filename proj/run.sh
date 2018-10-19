@@ -82,6 +82,19 @@ for THREAD in ${THREADS[*]}; do
     OMP_NUM_THREADS=$THREAD ./graph_projection --edgelistfile $DATA/ml_full.edgelist \
         --simple 1 --num-vertices 165237 --num-edges 20000263 | tee -a results/ml_full
 done
+# 64 165237 20000263 163.731 286830790
+# 32 165237 20000263 102.964 286830790
+# 16 165237 20000263 188.701 286830790
+# 8 165237 20000263 358.708 286830790
+# 4 165237 20000263 727.224 286830790
+# 2 165237 20000263 1109.32 286830790
+# 1 165237 20000263 - 286830790
+
+rm -f results/rmat; touch results/rmat
+for THREAD in ${THREADS[*]}; do
+    OMP_NUM_THREADS=$THREAD ./graph_projection --edgelistfile $DATA/graph500-scale18-ef16_adj.edgelist \
+        --simple 1 --num-vertices 174147 --num-edges 7600696 | tee -a results/rmat
+done
 
 # -------------------------------------
 # GraphBLAS
@@ -218,6 +231,9 @@ make clean; make
 #  preprocess time: 980.844000 ms
 #  postprocess time: 8658.879042 ms
 #  total time: 13260.521173 ms
+# 
+# Profiling notes:
+#   92% of time is spent in enactor, 7% in foreach
 
 ./bin/test_proj_9.1_x86_64 --graph-type market --graph-file $DATA/ml_full_square.mtx \
     --quick --num-runs 10
@@ -226,83 +242,3 @@ make clean; make
 ./bin/test_proj_9.1_x86_64 --graph-type market --graph-file $DATA/graph500-scale18-ef16_adj.mtx \
     --quick --num-runs 10
 # OOM!
-
-
-# ======================================================================================
-# ================================= vv SCRATCH vv ======================================
-
-
-
-
-
-
-
-WORKDIR=$(pwd)
-cd ~/projects/davis/gunrock/tests/proj
-make clean
-make
-
-# --
-# Reference implementation
-
-cd /home/bjohnson/projects/hive/cpp/graph_projection
-mkdir -p results
-make clean
-make
-
-# Small tests
-OMP_NUM_THREADS=1 ./graph_projection --edgelistfile sample_edgelist.csv --simple 0 --num-vertices 9 --num-edges 9
-OMP_NUM_THREADS=1 ./graph_projection --edgelistfile sample_edgelist.csv --simple 1 --num-vertices 9 --num-edges 9
-
-./graph_projection --edgelistfile chesapeake.edgelist --simple 0 --num-vertices 39 --num-edges 340
-./graph_projection --edgelistfile dir_chesapeake.edgelist --simple 0 --num-vertices 39 --num-edges 170
-
-
-# Small MovieLens
-cp ~/projects/davis/hive_tests/proj/ml-20m/small_ratings_clean.tsv small_ratings_clean.tsv
-
-THREADS=(1 2 4 8 16 32 64)
-echo "" > results/small_ratings_clean
-for THREAD in ${THREADS[*]}; do
-    echo $THREAD
-    OMP_NUM_THREADS=$THREAD ./graph_projection --edgelistfile small_ratings_clean.tsv --simple 1 \
-        --num-vertices 20693 --num-edges 1000000 >> results/small_ratings_clean
-done
-
-# RMAT graph -- incorrect?
-wget https://graphchallenge.s3.amazonaws.com/synthetic/graph500-scale18-ef16/graph500-scale18-ef16_adj.tsv.gz
-gunzip graph500-scale18-ef16_adj.tsv.gz
-
-THREADS=(1 2 4 8 16 32 64)
-echo "" > results/rmat
-for THREAD in ${THREADS[*]}; do
-    echo $THREAD
-    OMP_NUM_THREADS=$THREAD ./graph_projection  --edgelistfile graph500-scale18-ef16_adj.tsv \
-        --num-vertices 262144 --num-edges 4194304 >> results/rmat
-done
-
-OMP_NUM_THREADS=16 ./graph_projection  --edgelistfile tmp \
-    --num-vertices 174147 --num-edges 7600696
-
-# --
-# GraphBLAS
-
-cd projects/davis/graphblas_proj/
-export GRAPHBLAS_PATH=$HOME/projects/davis/GraphBLAS
-make clean
-make
-
-# small ml20m
-./proj --X ~/projects/davis/hive_tests/proj/ml-20m/small_ratings.mtx --unweighted 1 --proj-debug 1 --print-results 0 --onto-cols 1
-
-# small whole ml20m
-./proj --X ~/projects/davis/hive_tests/proj/ml-20m/ratings.mtx --unweighted 1 --proj-debug 1 --print-results 0 --onto-cols 1
-
-# RMAT graph
-# !! Need to run this manually, because of 1-based indexing, etc
-# python ~/edgelist2mtx.py \
-#     --symmetry general \
-#     --inpath /home/bjohnson/projects/hive/cpp/graph_projection/graph500-scale18-ef16_adj.tsv \
-#     --outpath graph500-scale18-ef16_adj.mtx
-# ./proj --X graph500-scale18-ef16_adj.mtx --unweighted 1 --proj-debug 1 --print-results 0 --onto-cols 1
-# !! Too large for GPU memory
