@@ -30,40 +30,25 @@ LCG
  * standard gunrock datasets
  * partial writeup
 
-
 ### SGM
     - start writeup
     - test on connectome graphs
     - finish optimizing auction algorithm
 
 ### PROJ
-    - implement as SpMM
     - implement other weighting functions
-    - test Yuechao's OOM 
+    - TODO: chunked multiplication, to support much larger graphs
  * partial writeup
- 
- 
-     - OOM once graph is large enough?
-     - How can we handle this gracefully?
-     - Should implement this w/ SpMM 
-        - different weighting functions may complicate things, but the weighting functions in the reference code don't make a ton of sense
-        - Running Scala w/ false is like multipliying G.T.dot(G_ones) where G_ones is G but w/ ones instead of values
-        - Running Scala w/ true doesn't obviously map to matrix multiplication w/ normal semiring
 
 ### graph_search
-    - implement biased random sampling
- * partial writeup
+    - more profiling
+    - more datasets
+    - rerun Gunrock benchmarks w/ O3 (?)
+    - implement function that terminates run when no nodes are active
  
 ### application classification
     - start writeup
     - more datasets for testing ?
 
 ### pr_nibble
-     - need to start writeup
- - standard Gunrock datasets
-
---
-TODO
-
-- Implement SpMM version of `GraphSearch`
-- Implement biased random sampling in `GraphSearch`
+    - work with Carl

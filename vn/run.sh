@@ -23,4 +23,5 @@ mkdir -p results
 python make-cmds.py > cmds.sh
 chmod +x cmds.sh
 
-./cmds.sh
+cat ./cmds.sh
+

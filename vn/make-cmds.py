@@ -32,7 +32,7 @@ gunrock_datapath = '/home/bjohnson/projects/davis/gunrock/dataset/large'
 datasets = {
     "%s/soc-LiveJournal1/soc-LiveJournal1.mtx" % gunrock_datapath : ( 4847571,   4847571,  68993773),
     "%s/hollywood-2009/hollywood-2009.mtx"     % gunrock_datapath : ( 1139905,   1139905,  57515616),
-    "%s/soc-orkut/soc-orkut.mtx"               % gunrock_datapath : ( 2997166,   2997166, 106349209), # not running here, or in SSSP, skip for now
+    # "%s/soc-orkut/soc-orkut.mtx"               % gunrock_datapath : ( 2997166,   2997166, 106349209), # !! throws error
     "%s/indochina-2004/indochina-2004.mtx"     % gunrock_datapath : ( 7414866,   7414866, 194109311),
     "%s/road_usa/road_usa.mtx"                 % gunrock_datapath : (23947347,  23947347,  28854312),
     
