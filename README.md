@@ -1,7 +1,7 @@
 ### hive_tests
 
 graph_search
-    - standard datasets w/ randomly chosen seeds + random scores
+- - standard datasets w/ randomly chosen seeds + random scores
     - TA1 datasets?
     
 vertex_nomination
@@ -40,6 +40,8 @@ LCG
     - TODO: chunked multiplication, to support much larger graphs
  * partial writeup
 
+- This is currently broken on `dev-refactor`? Works on `sgpyc`'s `bkj-testing-hotfix` though
+
 ### graph_search
     - more profiling
     - more datasets
@@ -52,3 +54,10 @@ LCG
 
 ### pr_nibble
     - work with Carl
+
+--
+TODO
+
+- Implement SpMM version of `GraphSearch`
+- Implement biased random sampling in `GraphSearch`
+>>>>>>> eb1e45ad1452337e986e4478d49b09effa1f9bd5
